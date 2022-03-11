@@ -4,6 +4,7 @@ import {isTeamMember} from '../../utils/authorization'
 import {GQLContext} from '../graphql'
 import AtlassianIntegration from './AtlassianIntegration'
 import GitHubIntegration from './GitHubIntegration'
+import ADOIntegration from './ADOIntegration'
 import GitLabIntegration from './GitLabIntegration'
 import MattermostIntegration from './MattermostIntegration'
 import SlackIntegration from './SlackIntegration'
@@ -50,6 +51,14 @@ const TeamMemberIntegrations = new GraphQLObjectType<any, GQLContext>({
         if (!isTeamMember(authToken, teamId)) return null
         const auths = await dataLoader.get('slackAuthByUserId').load(userId)
         return auths.find((auth) => auth.teamId === teamId)
+      }
+    },
+    ado: {
+      type: ADOIntegration,
+      description: 'All things associated with a Azure DevOps integration for a team member',
+      resolve: async ({teamId, userId}, _args: unknown, {authToken, dataLoader}) => {
+        if (!isTeamMember(authToken, teamId)) return null
+        return dataLoader.get('githubAuth').load({teamId, userId})
       }
     }
   })

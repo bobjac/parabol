@@ -49786,6 +49786,11 @@ export interface ITeamMemberIntegrations {
    * All things associated with a slack integration for a team member
    */
   slack: ISlackIntegration | null;
+
+  /**
+   * All things associated with a Azure DevOps integration for a team member
+   */
+  ado: IADOIntegration | null;
 }
 
 /**
@@ -50498,6 +50503,28 @@ export const enum SlackNotificationEventTypeEnum {
    * notification that concerns a single member on the team
    */
   member = 'member',
+}
+
+/**
+ * Azure DevOps integration data for a given team member
+ */
+export interface IADOIntegration {
+  __typename: 'ADOIntegration';
+
+  /**
+   * composite key
+   */
+  id: string;
+
+  /**
+   * The access token to ADO. good forever
+   */
+  accessToken: string | null;
+
+  /**
+   * true if an access token exists, else false
+   */
+  isActive: boolean;
 }
 
 /**
